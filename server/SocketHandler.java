@@ -25,11 +25,12 @@ public class SocketHandler {
     return instance;
   }
 
-  public void init() throws IOException {
+  public void listen() throws IOException {
+    System.out.println("[Application] listening ");
     this.serverSocket = new ServerSocket(5432);
-    System.out.println("[Application] Started server ");
+  }
 
-    System.out.println("[Application] Waiting connection ");
+  public void waitConnection() throws IOException {
     socket = serverSocket.accept();
     System.out.println("[Application] Connected ");
 
@@ -37,7 +38,6 @@ public class SocketHandler {
   }
 
   public String getMessage() throws IOException {
-
     return this.scanner.nextLine();
   }
 
@@ -49,5 +49,9 @@ public class SocketHandler {
   public void stop() throws IOException {
     this.socket.close();
     this.serverSocket.close();
+  }
+
+  public Socket getSocket() {
+    return this.socket;
   }
 }

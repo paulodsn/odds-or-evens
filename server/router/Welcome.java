@@ -19,9 +19,9 @@ public class Welcome implements Router {
     arena.allocateSlot(player);
 
     if (arena.getStatus() == "closed") {
-      socketHandler.SendMessage("[Server]: Jogo iniciando");
+      arena.sendAll("[Server]: Jogo iniciando");
+    } else {
+      socketHandler.SendMessage("[Server]: Esperando outro jogador");
     }
-
-    socketHandler.SendMessage("[Server]: Esperando outro jogador");
   }
 }

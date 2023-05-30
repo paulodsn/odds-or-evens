@@ -8,16 +8,16 @@ public class Main {
     try {
       RouterFactory routerFactory = new RouterFactory();
       SocketHandler socketHandler = SocketHandler.getInstance();
-      socketHandler.init();
+      socketHandler.listen();
 
       while (true) {
-        String request = socketHandler.getMessage();
-        routerFactory.handle(request);
+        socketHandler.waitConnection();
+        Thread handleRequest = new HandleRequest(socketHandler, routerFactory);
+        handleRequest.start();
       }
 
     } catch (Exception e) {
       System.out.println(e);
     }
   }
-
 }

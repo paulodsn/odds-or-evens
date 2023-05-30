@@ -26,9 +26,9 @@ public class Game implements Router {
 
   @Override
   public void handleChoice() {
+    String name = scanner.nextLine();
 
     while (true) {
-      String name = scanner.nextLine();
       socketHandler.sendMessage("/welcome " + name);
 
       String message = socketHandler.receiveMessage();
