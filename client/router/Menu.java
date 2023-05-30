@@ -23,14 +23,14 @@ public class Menu implements Router {
 
     switch (choice) {
       case 1: {
-        System.out.println("WIP");
+        RouterFactory router = new RouterFactory();
+        router.handle(RouterType.GAME);
 
         break;
       }
       case 2: {
-        Router aboutGameRouter = RouterFactory.getView(RouterType.ABOUT_GAME);
-        aboutGameRouter.display();
-        aboutGameRouter.handleChoice();
+        RouterFactory router = new RouterFactory();
+        router.handle(RouterType.ABOUT_GAME);
 
         break;
       }

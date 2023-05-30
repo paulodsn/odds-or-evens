@@ -24,9 +24,8 @@ public class AboutGameView implements Router {
 
     switch (choice) {
       case 1:
-        Router menuRouter = RouterFactory.getView(RouterType.MENU);
-        menuRouter.display();
-        menuRouter.handleChoice();
+        RouterFactory router = new RouterFactory();
+        router.handle(RouterType.MENU);
 
         break;
     }

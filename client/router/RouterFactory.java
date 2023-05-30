@@ -1,13 +1,25 @@
 package client.router;
 
-public class RouterFactory {
-  public static Router getView(RouterType viewType) {
-    if (viewType == RouterType.MENU) {
-      return new Menu();
-    } else if (viewType == RouterType.ABOUT_GAME) {
-      return new AboutGameView();
-    }
+import java.util.HashMap;
+import java.util.Map;
 
-    throw new Error("View not found");
+public class RouterFactory {
+  private Map<RouterType, Router> routes = new HashMap<>();
+
+  public RouterFactory() {
+    routes.put(RouterType.MENU, new Menu());
+    routes.put(RouterType.ABOUT_GAME, new AboutGameView());
+    routes.put(RouterType.GAME, new Game());
+  }
+
+  public void handle(RouterType routerType) {
+    Router router = this.routes.get(routerType);
+
+    if (router != null) {
+      router.display();
+      router.handleChoice();
+    } else {
+      throw new Error("Router not found");
+    }
   }
 }

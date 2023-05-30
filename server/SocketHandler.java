@@ -7,10 +7,23 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class SocketHandler {
+  private static SocketHandler instance;
+
   Socket socket;
-  ServerSocket serverSocket;
   Scanner scanner;
+  ServerSocket serverSocket;
   PrintStream printStream;
+
+  private SocketHandler() {
+  }
+
+  public static synchronized SocketHandler getInstance() {
+    if (instance == null) {
+      instance = new SocketHandler();
+    }
+
+    return instance;
+  }
 
   public void init() throws IOException {
     this.serverSocket = new ServerSocket(5432);
@@ -20,10 +33,11 @@ public class SocketHandler {
     socket = serverSocket.accept();
     System.out.println("[Application] Connected ");
 
+    this.scanner = new Scanner(socket.getInputStream());
   }
 
   public String getMessage() throws IOException {
-    this.scanner = new Scanner(socket.getInputStream());
+
     return this.scanner.nextLine();
   }
 

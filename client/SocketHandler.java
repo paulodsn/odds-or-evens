@@ -7,9 +7,22 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class SocketHandler {
+  private static SocketHandler instance;
+
   Socket socket;
   PrintStream printStream;
   Scanner outputScanner;
+
+  private SocketHandler() {
+  }
+
+  public static synchronized SocketHandler getInstance() {
+    if (instance == null) {
+      instance = new SocketHandler();
+    }
+
+    return instance;
+  }
 
   public void init() throws UnknownHostException, IOException {
     System.out.println("[Server]: Conectado ao servidor...");

@@ -1,21 +1,18 @@
 package client;
 
-import client.router.Router;
 import client.router.RouterFactory;
 import client.router.RouterType;
 
 public class Client {
 
   public static void main(String[] args) {
-    RouterType step = RouterType.MENU;
 
     try {
-      SocketHandler socketHandler = new SocketHandler();
+      SocketHandler socketHandler = SocketHandler.getInstance();
       socketHandler.init();
 
-      Router router = RouterFactory.getView(step);
-      router.display();
-      router.handleChoice();
+      RouterFactory router = new RouterFactory();
+      router.handle(RouterType.MENU);
 
       // System.out.println("[Server]: Vamos jogar um jogo chamado \"Par ou Impar\"");
 
@@ -32,7 +29,7 @@ public class Client {
       // System.out.println("Encerrando conexão.");
       // socketHandler.stop();
     } catch (Exception e) {
-      System.out.println("Erro ao fechar as conexões.");
+      System.out.println(e);
     }
   }
 }

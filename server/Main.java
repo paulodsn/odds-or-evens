@@ -1,22 +1,23 @@
 package server;
 
+import server.router.RouterFactory;
+
 public class Main {
 
   public static void main(String[] args) {
-    String message = "";
-
     try {
-      SocketHandler socketHandler = new SocketHandler();
+      RouterFactory routerFactory = new RouterFactory();
+      SocketHandler socketHandler = SocketHandler.getInstance();
       socketHandler.init();
 
-      while (!message.equals("exit")) {
-        message = socketHandler.getMessage();
-        System.out.println(message);
-        socketHandler.SendMessage("Bem vindo " + message);
+      while (true) {
+        String request = socketHandler.getMessage();
+        routerFactory.handle(request);
       }
 
     } catch (Exception e) {
-      System.out.println("Error.");
+      System.out.println(e);
     }
   }
+
 }
