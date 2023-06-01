@@ -1,47 +1,124 @@
 package server.service;
 
 import java.io.IOException;
-import java.io.PrintStream;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import server.SocketHandler;
 import server.Player;
 
 public class Arena {
-  List<Player> players = new ArrayList<Player>();
-  List<Socket> connections = new ArrayList<Socket>();
+  private String id;
+  private String status = "open";
+  private Integer slots = 2;
 
-  String status = "open";
-  Integer slots = 2;
+  private Map<String, Player> players = new HashMap<>();
+
+  public Arena() {
+    this.id = UUID.randomUUID().toString();
+  }
 
   public void allocateSlot(Player player) {
     if (players.size() < this.slots) {
-      SocketHandler socketHandler = SocketHandler.getInstance();
-      connections.add(socketHandler.getSocket());
-      players.add(player);
+      if (players.size() == 1) {
+        String avaiableChoice = this.getAvailableChoice();
+        player.setChoice(avaiableChoice);
+      }
 
-      System.out.println(players.size());
+      players.put(player.getId(), player);
+
       if (players.size() == this.slots) {
         this.status = "closed";
       }
     }
   }
 
-  public String getStatus() {
-    return this.status;
-  }
+  public void sendToPlayerInArena(String message) {
+    for (Player player : players.values()) {
+      SocketHandler connection = player.getConnection();
 
-  public void sendAll(String message) {
-    for (Socket socket : connections) {
-      PrintStream printStream;
       try {
-        printStream = new PrintStream(socket.getOutputStream());
-        printStream.println(message);
+        connection.sendMessage(player.getId() + ";" + message);
       } catch (IOException e) {
         e.printStackTrace();
       }
     }
+  }
+
+  public boolean canDischargeChoice() {
+    boolean response = true;
+    for (Player player : players.values()) {
+      if (player.getChoice() == null) {
+        response = false;
+      }
+    }
+
+    return response;
+  }
+
+  public boolean canStartGame() {
+    boolean response = true;
+    for (Player player : players.values()) {
+      if (player.getAnswer() == null) {
+        response = false;
+      }
+    }
+
+    return response;
+  }
+
+  private String getAvailableChoice() {
+    String availableChoice = "P";
+
+    for (Player player : players.values()) {
+      String playerAnswer = player.getChoice();
+
+      if (availableChoice.equals(playerAnswer)) {
+        availableChoice = "I";
+      }
+    }
+
+    return availableChoice;
+  }
+
+  public Player getResult() {
+    Player winner = null;
+    Integer sum = 0;
+
+    for (Player player : players.values()) {
+      sum += Integer.parseInt(player.getAnswer());
+    }
+
+    String result = sum % 2 == 0 ? "P" : "I";
+    for (Player player : players.values()) {
+      if (player.getChoice().equals(result)) {
+        winner = player;
+      }
+    }
+
+    return winner;
+  }
+
+  public boolean hasPlayer(String playerId) {
+    return players.containsKey(playerId);
+  }
+
+  public void setAnswer(String playerId, String answer) {
+    Player player = players.get(playerId);
+    player.setAnswer(answer);
+  }
+
+  public void setChoice(String playerId, String choice) {
+    Player player = players.get(playerId);
+    player.setChoice(choice);
+  }
+
+  public String getStatus() {
+    return this.status;
+  }
+
+  public String getId() {
+    return this.id;
   }
 }

@@ -15,13 +15,14 @@ public class HandleRequest extends Thread {
 
   @Override
   public void run() {
-    String request;
-    try {
-      request = socketHandler.getMessage();
-      this.routerFactory.handle(request);
-    } catch (IOException e) {
-      e.printStackTrace();
+    while (true) {
+      String request;
+      try {
+        request = socketHandler.getMessage();
+        this.routerFactory.handle(request, socketHandler);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
-
 }

@@ -2,26 +2,27 @@ package server.router;
 
 import java.io.IOException;
 
-import server.Player;
 import server.SocketHandler;
+import server.Player;
 import server.service.Arena;
-import server.service.Gym;
+import server.service.Lobby;
 
 public class Welcome implements Router {
-  SocketHandler socketHandler = SocketHandler.getInstance();
-  Gym gym = Gym.getInstance();
+  Lobby lobby = Lobby.getInstance();
 
   @Override
-  public void handle(String name) throws IOException {
-    Player player = new Player(name);
-    Arena arena = gym.getArena();
+  public void handle(String name, SocketHandler response) throws IOException {
+    Player player = new Player(name, response);
+    Arena arena = lobby.getArena();
 
     arena.allocateSlot(player);
 
     if (arena.getStatus() == "closed") {
-      arena.sendAll("[Server]: Jogo iniciando");
+      String choice = player.getChoice().equals("P") ? "Par" : "Impar";
+      response.sendMessage(player.getId() + ";Você escolheu " + choice);
+      arena.sendToPlayerInArena("START");
     } else {
-      socketHandler.SendMessage("[Server]: Esperando outro jogador");
+      response.sendMessage(player.getId() + ";CHOOSE");
     }
   }
 }
