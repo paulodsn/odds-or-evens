@@ -10,7 +10,7 @@ import server.service.Lobby;
 
 public class Choice implements Router {
   Lobby lobby = Lobby.getInstance();
-  Integer maximumTime = 20000;
+  Integer maximumTime = 30000;
 
   @Override
   public void handle(String payload, SocketHandler response) throws IOException {
