@@ -39,7 +39,9 @@ public class Arena {
       SocketHandler connection = player.getConnection();
 
       try {
-        connection.sendMessage(player.getId() + ";" + message);
+        if (connection != null) {
+          connection.sendMessage(player.getId() + ";" + message);
+        }
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -68,7 +70,7 @@ public class Arena {
     return response;
   }
 
-  private String getAvailableChoice() {
+  public String getAvailableChoice() {
     String availableChoice = "P";
 
     for (Player player : players.values()) {

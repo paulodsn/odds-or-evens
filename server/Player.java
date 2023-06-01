@@ -17,6 +17,14 @@ public class Player {
     this.connection = connection;
   }
 
+  public Player(String name, String choice, String answer) {
+    this.id = UUID.randomUUID().toString();
+
+    this.name = name;
+    this.choice = choice;
+    this.answer = answer;
+  }
+
   public String getChoice() {
     return choice;
   }
