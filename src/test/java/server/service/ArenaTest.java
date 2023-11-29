@@ -9,5 +9,6 @@ public class ArenaTest {
     public void testArenaConstructor() {
         Arena arena = new Arena();
         assertNotNull(arena.getId());
+
     }
 }
