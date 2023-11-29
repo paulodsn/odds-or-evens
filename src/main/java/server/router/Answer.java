@@ -22,7 +22,7 @@ public class Answer implements Router {
         while (!arena.canStartGame()) {
             try {
                 response.sendMessage(playerId + ";Esperando a resposta do outro jogador");
-                Thread.sleep(10000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

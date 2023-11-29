@@ -13,16 +13,20 @@ public class HandleRequest extends Thread {
     this.routerFactory = routerFactory;
   }
 
+  public void execute() {
+    try {
+      String request;
+      request = socketHandler.getMessage();
+      this.routerFactory.handle(request, socketHandler);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   @Override
   public void run() {
     while (true) {
-      String request;
-      try {
-        request = socketHandler.getMessage();
-        this.routerFactory.handle(request, socketHandler);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      this.execute();
     }
   }
 }

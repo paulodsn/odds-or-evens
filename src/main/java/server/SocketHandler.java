@@ -31,7 +31,4 @@ public class SocketHandler {
     this.socket.close();
   }
 
-  public Socket getSocket() {
-    return this.socket;
-  }
 }

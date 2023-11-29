@@ -16,7 +16,6 @@ public class ServerSocketHandlerTest {
         severSocketHandler = SeverSocketHandler.getInstance();
     }
 
-
     @Test
     public void testGetInstance () {
         assertNotNull(severSocketHandler);
